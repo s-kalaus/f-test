@@ -1,0 +1,96 @@
+<section layout="row" flex>
+
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="f-sidenav-left" md-is-locked-open="$mdMedia('gt-sm')">
+
+        <md-content>
+
+            <md-list flex class="f-conversation-list">
+
+                <md-list-item ng-class="{'active': !chat.conversationId}" ng-href="/" aria-label="New Conversation">
+
+                  <div class="md-list-item-text" layout="column">
+
+                    <h3>New Conversation</h3>
+                  </div>
+                </md-list-item>
+
+                <md-list-item ng-class="{'active': item.conversationId === chat.conversationId}" ng-repeat="item in chat.conversations" ng-href="/conversation/{{ item.conversationId }}" aria-label="Open Conversation">
+
+                  <div class="md-list-item-text" layout="column">
+
+                    <h3 f-conversation-members="item.members"></h3>
+                  </div>
+                </md-list-item>
+            </md-list>
+        </md-content>
+    </md-sidenav>
+
+    <md-content flex layout="column">
+
+        <md-toolbar flex="none" class="md-theme-indigo">
+
+            <div class="md-toolbar-tools">
+
+                <h1 ng-if="chat.conversation" f-conversation-members="chat.conversation.members"></h1>
+
+                <h1 ng-if="!chat.conversation">Specify chat partner and message</h1>
+
+                <div flex>
+
+                    <md-button ng-click="chat.openSidenav('f-sidenav-left')" hide-gt-sm class="md-icon-button" aria-label="Open Conversations List">
+
+                        <i class="fa fa-caret-square-o-left"></i>
+                    </md-button>
+                </div>
+            </div>
+        </md-toolbar>
+
+        <md-content flex>
+
+            <div class="f-message-member" f-messages-list-height="chat.conversationId + chat.conversation.messages.length" ng-if="!chat.conversation">
+
+                <form ng-submit="chat.sendMessage()">
+
+                    <md-input-container>
+
+                        <input ng-model="chat.member" type="email" placeholder="Enter email of existing user">
+                    </md-input-container>
+                </form>
+            </div>
+
+            <div class="f-message-list" f-messages-list-height="chat.conversationId + chat.conversation.messages.length" ng-if="chat.conversation">
+
+                <div class="item" ng-repeat="item in chat.conversation.messages">
+
+                    <div class="meta">
+
+                        <span class="date">{{ item.date | date:'d, MMM HH:mm' }}</span>
+
+                        <span class="user">{{ item.owner.email }}</span>
+                    </div>
+
+                    <div class="text">{{ item.message }}</div>
+                </div>
+            </div>
+
+            <div class="f-message-loading" ng-show="chat.loading">
+
+                <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+            </div>
+        </md-content>
+
+        <form ng-submit="chat.sendMessage()">
+
+            <md-toolbar flex="none" class="f-chat-message">
+
+                <div class="md-toolbar-tools">
+
+                    <md-input-container flex>
+
+                        <input ng-model="chat.message" type="text" autocomplete="off" placeholder="Enter message and hit Enter">
+                    </md-input-container>
+                </div>
+            </md-toolbar>
+        </form>
+    </md-content>
+</section>

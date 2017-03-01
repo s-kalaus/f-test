@@ -1,0 +1,99 @@
+.f-test{
+
+    .f-conversation-list{
+        padding: 0;
+
+        .active{
+            background: #f1f1f1;
+        }
+    }
+
+    .f-toolbar{
+
+        min-height: 54px;
+
+        .title{
+            padding: 20px;
+        }
+    }
+
+    .f-authbar{
+
+        .name{
+            max-height: 54px;
+            height: 54px;
+            font-size: 16px;
+        }
+
+        .logout{
+            padding: 8px;
+        }
+    }
+
+    .f-chat-message{
+
+        .md-toolbar-tools{
+            background: #ccc;
+
+
+            md-input-container{
+                margin: 0;
+                vertical-align: top;
+
+                .md-errors-spacer{
+                    display: none;
+                }
+
+                &.md-input-focused,
+                &.md-input-has-value{
+
+                    label{
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+
+    .f-message-loading{
+        position: absolute;
+        top: 10px;
+        left: 16px;
+        right: 16px;
+    }
+
+    .f-message-member{
+        padding: 30px 16px 10px;
+        background-color: #f1f1f1;
+        height: 58px;
+
+        md-input-container{
+            display: block;
+            margin: 0;
+        }
+    }
+
+    .f-message-list{
+        padding: 20px 16px 0px;
+
+        .item{
+            margin-bottom: 20px;
+
+            .meta{
+                font-size: 12px;
+                color: #858585;
+                margin-bottom: 5px;
+                background-color: #efefef;
+                padding: 5px 10px;
+
+                .date{
+                    margin-right: 20px;
+                }
+            }
+
+            .text{
+                font-size: 13px;
+            }
+        }
+    }
+}

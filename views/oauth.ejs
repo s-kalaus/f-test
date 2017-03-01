@@ -1,0 +1,90 @@
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: helvetica, arial, verdana, sans-serif;
+    }
+
+    body{
+        background: #d9dfe7;
+        padding: 0 20px;
+    }
+
+    .oauth-window {
+        width: 400px;
+        margin: 0 auto;
+        margin-top: 120px;
+        margin-bottom: 2%;
+    }
+
+    .oauth-window h1 {
+        background: #333333;
+        padding: 20px 0;
+        font-size: 140%;
+        font-weight: 300;
+        text-align: center;
+        color: #fff;
+    }
+
+    .error {
+        background:#fff;
+        padding: 23px 0px 0px 20px;
+        display: block;
+        color: red;
+    }
+
+    form {
+        background: #ffffff;
+        padding: 6% 4%;
+    }
+
+    input[type="email"],input[type="password"]{
+        width:100%;
+        background:#fff;
+        margin-bottom:4%;
+        border:1px solid #ccc;
+        padding:4%;
+        font-size:95%;
+        color:#555;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        background: #333333;
+        border: 0;
+        padding: 4%;
+        font-size: 100%;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover{
+        background: #000000;
+    }
+</style>
+
+<div class="oauth-window">
+
+    <h1>F-Test API</h1>
+
+    <% if (typeof error !== 'undefined') { %>
+        <div class="error"><%= error %></div>
+    <% } %>
+
+    <form action="<%= url %>" method="post">
+
+        <input type="email" name="email" placeholder="Email" />
+
+        <input type="password" name="password" placeholder="Password" />
+
+        <input type="hidden" name="redirect_uri" value="<%= typeof redirect_uri === 'undefined' ? '' : redirect_uri %>" />
+
+        <input type="hidden" name="state" value="<%= typeof state === 'undefined' ? '' : state %>" />
+
+        <input type="hidden" name="realm" value="<%= typeof realm === 'undefined' ? '' : realm %>" />
+
+        <input type="hidden" name="scope" value="<%= typeof scope === 'undefined' ? '' : scope %>" />
+
+        <input type="submit" value="Login" />
+    </form>
+</div>

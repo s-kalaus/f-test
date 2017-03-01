@@ -1,0 +1,32 @@
+<md-toolbar class="md-theme-indigo">
+
+    <div class="md-toolbar-tools">
+
+        <h1>Sign In</h1>
+    </div>
+</md-toolbar>
+
+<md-content layout-padding>
+
+    <form name="loginForm">
+
+        <md-input-container class="md-block">
+
+            <label>Email</label>
+
+            <input type="email" ng-model="vm.card.email" md-maxlength="50" required />
+        </md-input-container>
+
+        <md-input-container class="md-block">
+
+            <label>Password</label>
+
+            <input type="password" ng-model="vm.card.password" required />
+        </md-input-container>
+
+        <section layout="row" layout-sm="column" layout-wrap>
+
+            <md-button ng-click="vm.submit()" class="md-raised md-primary" ng-disabled="loginForm.$invalid">Sign In</md-button>
+        </section>
+    </form>
+</md-content>

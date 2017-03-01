@@ -1,0 +1,67 @@
+<!doctype html>
+<html ng-app="fTest">
+
+    <head>
+
+        <title>F-Test</title>
+
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/build/%build_id%/stylesheets/all.css">
+
+        <base href="/"></base>
+    </head>
+
+    <body class="f-test" ng-cloak>
+
+        <div layout-fill ng-controller="mainController as app">
+
+            <div ng-if="app.inited" layout="column" layout-fill>
+
+                <md-toolbar flex="none" class="md-menu-toolbar f-toolbar">
+
+                    <div layout="row">
+
+                        <md-toolbar-filler layout layout-align="center center">
+
+                            <i class="fa fa-comment"></i>
+                        </md-toolbar-filler>
+
+                        <div flex>
+
+                            <h2 class="md-toolbar-tools title"><a href="/">F-Test</a></h2>
+                        </div>
+
+                        <div class="f-authbar" flex="none" layout="row" ng-if="app.userService.isLoggedIn()">
+
+                            <h3 flex class="md-toolbar-tools name"><a href="/user">{{ app.userService.user.email }}</a></h3>
+
+                            <div flex="none" class="logout">
+
+                                <md-button aria-label="Sign Out" class="md-icon-button" ng-click="app.userService.logout()">
+
+                                    <i class="fa fa-sign-out"></i>
+                                </md-button>
+                            </div>
+                        </div>
+
+                        <div class="f-authbar" flex="none" ng-if="!app.userService.isLoggedIn()">
+
+                            <div class="logout">
+
+                                <md-button aria-label="Sign Out" class="md-icon-button" ng-click="app.userService.login()">
+
+                                    <i class="fa fa-sign-in"></i>
+                                </md-button>
+                            </div>
+                        </div>
+                    </div>
+                </md-toolbar>
+
+                <div flex layout="column" ng-view></div>
+            </div>
+        </div>
+
+        <script src="/build/%build_id%/javascripts/all.js"></script>
+    </body>
+</html>
+
