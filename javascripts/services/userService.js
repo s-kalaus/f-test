@@ -20,6 +20,8 @@ factory('userService', ['userFactory', '$location', '$cookies', 'socketService',
     Service.getUser = getUser;
     Service.logout = logout;
     Service.login = login;
+    Service.list = list;
+    Service.show = show;
     Service.signin = signin;
 
     function isLoggedIn() {
@@ -59,6 +61,18 @@ factory('userService', ['userFactory', '$location', '$cookies', 'socketService',
         }, callback);
     }
 
+    function list(params, callback) {
+
+        return userFactory.list(params, function(result) {
+
+            if (!result.success) {
+                return callback(result);
+            }
+
+            return callback(null, result.data);
+        }, callback);
+    }
+
     function getUser(params, callback) {
 
         callback = callback || angular.noop;
@@ -72,6 +86,18 @@ factory('userService', ['userFactory', '$location', '$cookies', 'socketService',
             Service.user = result.data;
 
             socketService.init($cookies.get('token'));
+
+            return callback(null, result.data);
+        }, callback);
+    }
+
+    function show(params, callback) {
+
+        return userFactory.show(params, function(result) {
+
+            if (!result.success) {
+                return callback(result);
+            }
 
             return callback(null, result.data);
         }, callback);

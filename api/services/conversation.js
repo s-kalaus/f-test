@@ -11,7 +11,7 @@ var ConversationService = function(config) {
 
 ConversationService.prototype.list = function(params, callback) {
 
-    return Conversations.list(params.userId, function(err, list) {
+    return Conversations.list({}, function(err, list) {
 
         return callback({
             success: true,
@@ -113,21 +113,6 @@ ConversationService.prototype.add = function(params, callback) {
         return callback({
             success: true,
             data: conversation
-        });
-    });
-
-    return Conversations.add(params.conversationId, params.userId, params.message, function(err, item) {
-
-        if (!item) {
-
-            return callback({
-                success: false
-            });
-        }
-
-        return callback({
-            success: true,
-            data: item
         });
     });
 };

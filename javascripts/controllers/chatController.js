@@ -12,12 +12,14 @@ controller('chatController', ['userService', '$mdSidenav', '$location', '$routeP
 
     var chat = this;
 
+    chat.users = [];
     chat.conversations = [];
     chat.conversationId = Number($routeParams.id) || null;
     chat.conversation = null;
     chat.message = '';
     chat.member = '';
     chat.loading = false;
+    chat.tabIndex = 1;
 
     chat.openSidenav = openSidenav;
     chat.sendMessage = sendMessage;
@@ -163,6 +165,24 @@ controller('chatController', ['userService', '$mdSidenav', '$location', '$routeP
         });
     }
 
+    function getUsers(onSuccess) {
+
+        onSuccess = onSuccess || angular.noop;
+
+        chat.loading = true;
+
+        return userService.list({}, function(err, list) {
+
+            chat.loading = false;
+
+            if (err) {
+                return onSuccess();
+            }
+
+            chat.users = list;
+        });
+    }
+
     function getMessages(onSuccess) {
 
         onSuccess = onSuccess || angular.noop;
@@ -213,15 +233,29 @@ controller('chatController', ['userService', '$mdSidenav', '$location', '$routeP
 
             socketService.io.on('f-conversation-added', function(data) {
 
+                chat.tabIndex = 0;
+
                 var hadConversations = chat.conversations.length;
 
-                return getConversations(function() {
+                getConversations(function() {
 
                     if (chat.conversationId && (hadConversations || chat.conversationId === data.conversationId)) {
                         return;
                     }
 
                     return $location.path('/conversation/' + data.conversationId);
+                });
+
+                return getUsers();
+            });
+
+            socketService.io.on('f-conversation-updated', function(data) {
+
+                return getConversations(function() {
+
+                    if (data.conversationId === chat.conversationId) {
+                        getConversation();
+                    }
                 });
             });
 
@@ -233,7 +267,14 @@ controller('chatController', ['userService', '$mdSidenav', '$location', '$routeP
 
                 return getMessages();
             });
+
+            socketService.io.on('f-user-added', function() {
+
+                return getUsers();
+            });
         });
+
+        getUsers();
     }
 
     init();

@@ -71,6 +71,8 @@ var MessageApi = {
         var utilService = new UtilService(config);
         var messageService = new MessageService(config);
 
+        var memberAdded = false;
+
         return async.waterfall([
             function(next) {
 
@@ -80,6 +82,7 @@ var MessageApi = {
                         return next(result);
                     }
 
+                    memberAdded = result.memberAdded;
 
                     return next(null, result);
                 });
@@ -93,6 +96,10 @@ var MessageApi = {
                         item.members.forEach(function(member) {
 
                             socketService.emit(member, 'f-message-added', item);
+
+                            if (memberAdded) {
+                                socketService.emit(member, 'f-conversation-updated', item);
+                            }
                         });
                     }
 

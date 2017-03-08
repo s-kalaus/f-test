@@ -8,11 +8,12 @@ directive('fConversationMembers', [function () {
     return {
         restrict: 'A',
         scope: {
-            model: '=fConversationMembers'
+            model: '=fConversationMembers',
+            conversation: '=conversation'
         },
         template: [
 
-            '<span ng-repeat="item in model">{{ ($index ? ", " : "") + item.email }}</span>'
+            '<div ng-repeat="item in model" data-f-user-avatar="item" data-conversation="conversation"></div>'
         ].join('')
     };
 }]);

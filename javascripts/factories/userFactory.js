@@ -8,6 +8,10 @@ factory('userFactory',  ['$resource', 'configService', function($resource, confi
 
     return $resource(configService.get('apiUrl') + '/user', {}, {
 
+        list: {
+            method: 'GET'
+        },
+        
         show: {
             url: configService.get('apiUrl') + '/user/:userId',
             method: 'GET'

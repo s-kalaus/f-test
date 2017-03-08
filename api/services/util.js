@@ -17,6 +17,11 @@ UtilService.prototype.formatParams = function(req) {
     }
 
     if (req.user && req.user.userId) {
+
+        if (ret.userId && ret.userId !== 'me') {
+            ret.userOriginalId = Number(ret.userId || 0);
+        }
+
         ret.userId = req.user.userId;
     }
 

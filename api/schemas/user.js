@@ -1,6 +1,34 @@
 'use strict';
 
 module.exports = {
+    '/user': {
+        'x-swagger-router-controller': 'user',
+        get: {
+            tags: ['user'],
+            description: 'Get users list',
+            operationId: 'list',
+            parameters: [],
+            responses: {
+                200: {
+                    description: 'Success',
+                    schema: {
+                        $ref: '#/definitions/ListResponse'
+                    }
+                },
+                'default': {
+                    description: 'Error',
+                    schema: {
+                        $ref: '#/definitions/ErrorResponse'
+                    }
+                }
+            },
+            security: [
+                {
+                    f_auth: ['user:list']
+                }
+            ]
+        }
+    },
     '/user/signin': {
         'x-swagger-router-controller': 'user',
         post: {
@@ -12,6 +40,13 @@ module.exports = {
                     name: 'email',
                     'in': 'formData',
                     description: 'Email',
+                    type: 'string',
+                    required: true
+                },
+                {
+                    name: 'name',
+                    'in': 'formData',
+                    description: 'Name',
                     type: 'string',
                     required: true
                 },

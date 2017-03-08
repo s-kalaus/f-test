@@ -26,7 +26,8 @@ module.exports = function(config) {
         files: [
             'www/build/' + buildId + '/javascripts/all.js',
             'bower_components/angular-mocks/angular-mocks.js',
-            'tests/ui/services/user.js'
+            'tests/ui/services/user.js',
+            'tests/ui/controllers/chat.js'
         ],
         exclude: [],
         logLevel: config.LOG_INFO

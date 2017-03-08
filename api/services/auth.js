@@ -123,6 +123,7 @@ AuthService.prototype.oauthCreateToken = function(params, callback) {
     var token = 'error';
     var user = null;
     var scopeRemote = [];
+    var created = false;
 
     return async.series([
         function(next) {
@@ -133,6 +134,10 @@ AuthService.prototype.oauthCreateToken = function(params, callback) {
 
             if (!params.email) {
                 return next({success: false, message: 'Email not set'});
+            }
+
+            if (!params.name) {
+                return next({success: false, message: 'Name not set'});
             }
 
             if (!params.password) {
@@ -152,9 +157,10 @@ AuthService.prototype.oauthCreateToken = function(params, callback) {
                     var salt = Math.random().toString(36).substring(7);
                     var passwordHash = crypto.createHash('sha1').update(params.password + ':' + salt).digest('hex');
 
-                    return Users.add(params.email, passwordHash, salt, function(err, _user) {
+                    return Users.add(params.email, params.name, passwordHash, salt, function(err, _user) {
 
                         user = _user;
+                        created = true;
 
                         return next();
                     });
@@ -222,9 +228,11 @@ AuthService.prototype.oauthCreateToken = function(params, callback) {
 
         return callback({
             success: true,
+            userId: user.userId,
             token: token,
             redirect_uri: params.redirect_uri,
-            state: params.state
+            state: params.state,
+            created: true
         });
     });
 };

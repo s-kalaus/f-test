@@ -8,21 +8,16 @@ process.fCache.conversations = data;
 
 module.exports = {
 
-    list: function(userId, callback) {
+    list: function(params, callback) {
 
-        var filtered = data.filter(function(item) {
-
-            return item.owner === userId || item.members.indexOf(userId) !== -1;
-        });
-
-        return callback(null, _.cloneDeep(filtered));
+        return callback(null, _.cloneDeep(data));
     },
 
     findById: function(conversationId, userId, callback) {
 
         var found = data.filter(function(item) {
 
-            return item.conversationId === conversationId && (item.owner === userId || item.members.indexOf(userId) !== -1);
+            return item.conversationId === conversationId;
         });
 
         return callback(null, found.length ? _.cloneDeep(found[0]) : null);

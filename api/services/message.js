@@ -1,6 +1,9 @@
 'use strict';
 
+var async = require('async');
+
 var Messages = require('../models').Messages;
+var Conversations = require('../models').Conversations;
 
 var MessageService = function(config) {
 
@@ -20,20 +23,66 @@ MessageService.prototype.list = function(params, callback) {
 
 MessageService.prototype.add = function(params, callback) {
 
-    return Messages.add(params.conversationId, params.userId, params.message, function(err, item) {
+    var conversation = null;
+    var message = null;
+    var memberAdded = false;
 
-        if (!item) {
+    return async.series([
+        function(next) {
 
-            return callback({
-                success: false
+            return Conversations.findById(params.conversationId, null, function(err, _conversation) {
+
+                if (!_conversation) {
+                    return next({success: false, message: 'Conversation not found'});
+                }
+
+                conversation = _conversation;
+
+                return next();
             });
+        },
+        function(next) {
+
+            if (conversation.members.indexOf(params.userId) !== -1) {
+                return next();
+            }
+
+            return Conversations.addMember(conversation.conversationId, params.userId, function(err, item) {
+
+                conversation = item;
+
+                memberAdded = true;
+
+                return next();
+            });
+        },
+        function(next) {
+
+            return Messages.add(conversation.conversationId, params.userId, params.message, function(err, _message) {
+
+                if (!_message) {
+                    return next({success: false, message: 'Message Not Created'});
+                }
+
+                message = _message;
+
+                return next();
+            });
+        }
+    ], function(err) {
+
+        if (err && err !== true) {
+            return callback(err);
         }
 
         return callback({
             success: true,
-            data: item
+            memberAdded: true,
+            data: message
         });
     });
+
+
 };
 
 module.exports = MessageService;

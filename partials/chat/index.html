@@ -3,25 +3,50 @@
     <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="f-sidenav-left" md-is-locked-open="$mdMedia('gt-sm')">
 
         <md-content>
+            <md-tabs md-selected="chat.tabIndex" md-dynamic-height md-border-bottom>
 
-            <md-list flex class="f-conversation-list">
+                <md-tab label="Users">
 
-                <md-list-item ng-class="{'active': !chat.conversationId}" ng-href="/" aria-label="New Conversation">
+                    <md-list flex class="f-user-list">
 
-                  <div class="md-list-item-text" layout="column">
+                        <md-list-item ng-repeat="item in chat.users" ng-href="/user/{{ item.userId }}" aria-label="Open Conversation with user">
 
-                    <h3>New Conversation</h3>
-                  </div>
-                </md-list-item>
+                            <div data-f-user-avatar="item" data-conversation="chat.conversation"></div>
 
-                <md-list-item ng-class="{'active': item.conversationId === chat.conversationId}" ng-repeat="item in chat.conversations" ng-href="/conversation/{{ item.conversationId }}" aria-label="Open Conversation">
+                            <div class="md-list-item-text" layout="column">
 
-                  <div class="md-list-item-text" layout="column">
+                                <h3>{{ item.name }}</h3>
+                            </div>
+                        </md-list-item>
+                    </md-list>
 
-                    <h3 f-conversation-members="item.members"></h3>
-                  </div>
-                </md-list-item>
-            </md-list>
+                    <md-content ng-if="!chat.users.length" class="md-padding">
+                        No Users
+                    </md-content>
+                </md-tab>
+
+                <md-tab label="Conversations">
+
+                    <md-list flex class="f-conversation-list">
+
+                        <md-list-item ng-class="{'active': !chat.conversationId}" ng-href="/" aria-label="New Conversation">
+
+                          <div class="md-list-item-text" layout="column">
+
+                            <h3>New Conversation</h3>
+                          </div>
+                        </md-list-item>
+
+                        <md-list-item ng-class="{'active': item.conversationId === chat.conversationId}" ng-repeat="item in chat.conversations" ng-href="/conversation/{{ item.conversationId }}" aria-label="Open Conversation">
+
+                            <div class="md-list-item-text" layout="column">
+
+                                <h3 f-conversation-members="item.members" data-conversation="item"></h3>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-tab>
+            </md-tabs>
         </md-content>
     </md-sidenav>
 
@@ -31,7 +56,7 @@
 
             <div class="md-toolbar-tools">
 
-                <h1 ng-if="chat.conversation" f-conversation-members="chat.conversation.members"></h1>
+                <h1 ng-if="chat.conversation" f-conversation-members="chat.conversation.members" data-conversation="chat.conversation"></h1>
 
                 <h1 ng-if="!chat.conversation">Specify chat partner and message</h1>
 
@@ -60,16 +85,25 @@
 
             <div class="f-message-list" f-messages-list-height="chat.conversationId + chat.conversation.messages.length" ng-if="chat.conversation">
 
-                <div class="item" ng-repeat="item in chat.conversation.messages">
+                <div class="item" ng-class="{'own': item.owner.userId === app.userService.user.userId}" ng-repeat="item in chat.conversation.messages">
 
-                    <div class="meta">
+                    <div data-f-user-avatar="item.owner" data-conversation="chat.conversation"></div>
 
-                        <span class="date">{{ item.date | date:'d, MMM HH:mm' }}</span>
+                    <div class="body">
 
-                        <span class="user">{{ item.owner.email }}</span>
+                        <div class="meta">
+
+                            <span class="date">{{ item.date | date:'d, MMM HH:mm' }}</span>
+
+                            <span class="user">{{ item.owner.name }}</span>
+                        </div>
+
+                        <div class="text" ng-bind-html="item.message | fn2br | fhtml"></div>
                     </div>
+                </div>
 
-                    <div class="text">{{ item.message }}</div>
+                <div class="f-hey" ng-if="!chat.conversation.messages.length">
+                    Hey! Just type you message below and press Submit
                 </div>
             </div>
 
@@ -79,7 +113,7 @@
             </div>
         </md-content>
 
-        <form ng-submit="chat.sendMessage()">
+        <form>
 
             <md-toolbar flex="none" class="f-chat-message">
 
@@ -87,7 +121,12 @@
 
                     <md-input-container flex>
 
-                        <input ng-model="chat.message" type="text" autocomplete="off" placeholder="Enter message and hit Enter">
+                        <textarea ng-model="chat.message" md-maxlength="150" rows="2" placeholder="Enter message and press Submit"></textarea>
+                    </md-input-container>
+
+                    <md-input-container flex="none">
+
+                        <md-button ng-click="chat.sendMessage()" class="md-raised md-primary" aria-label="Send Message">Submit</md-button>
                     </md-input-container>
                 </div>
             </md-toolbar>

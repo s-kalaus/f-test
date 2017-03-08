@@ -48,7 +48,8 @@ ApiService.prototype.getSchema = function() {
                     'conversation:add': 'Add conversation',
                     'message:list': 'Get messages',
                     'message:add': 'Add message',
-                    'user:show': 'Get user'
+                    'user:show': 'Get user',
+                    'user:list': 'Get lists'
                 }
             }
         },

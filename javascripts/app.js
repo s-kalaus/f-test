@@ -25,6 +25,10 @@ var fTest = angular.module('fTest', [
             controller: 'userLoginController',
             controllerAs: 'vm'
         })
+        .when('/user/:id', {
+            template: '',
+            controller: 'userConversationController'
+        })
         .when('/user/logout', {
             template: '',
             controller: 'userLogioutController'

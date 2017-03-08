@@ -14,7 +14,8 @@ var config = {
             'conversation:add',
             'message:list',
             'message:add',
-            'user:show'
+            'user:show',
+            'user:list'
         ]
     }
 };
